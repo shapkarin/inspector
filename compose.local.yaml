@@ -1,6 +1,7 @@
 services:
   inspector:
     image: node:24-slim
+    container_name: inspector-local-dev
     working_dir: /app
     init: true
     stdin_open: true
