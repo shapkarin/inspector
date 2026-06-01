@@ -70,6 +70,13 @@ in named volumes. To reinstall from scratch, remove those volumes:
 docker compose -f compose.local.yaml down -v
 ```
 
+You can also run test script in the same container
+setup:
+
+```bash
+docker compose -f compose.local.yaml run --rm inspector npm test
+```
+
 ### From an MCP server repository
 
 To inspect an MCP server implementation, there's no need to clone this repo. Instead, use `npx`. For example, if your server is built at `build/index.js`:
