@@ -73,7 +73,7 @@ docker compose -f compose.local.yaml down -v
 With the container running, you can execute the test script inside the same container:
 
 ```bash
-docker compose -f compose.local.yaml exec inspector-local-dev npm test
+docker exec -it inspector-local-dev npm test
 ```
 
 ### From an MCP server repository
