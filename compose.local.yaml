@@ -1,6 +1,14 @@
 services:
   inspector:
-    image: node:24-slim
+    image: inspector-local-dev
+    build:
+      context: .
+      dockerfile_inline: |
+        FROM node:24-slim
+
+        WORKDIR /app
+
+        COPY . .
     container_name: inspector-local-dev
     working_dir: /app
     init: true
@@ -17,15 +25,17 @@ services:
       MCP_AUTO_OPEN_ENABLED: "false"
       MCP_PROXY_AUTH_TOKEN: "${MCP_PROXY_AUTH_TOKEN:-dev-token}"
       CHOKIDAR_USEPOLLING: "true"
-    volumes:
-      - .:/app
-      - inspector-node-modules:/app/node_modules
-      - inspector-client-node-modules:/app/client/node_modules
-      - inspector-server-node-modules:/app/server/node_modules
-      - inspector-cli-node-modules:/app/cli/node_modules
-
-volumes:
-  inspector-node-modules:
-  inspector-client-node-modules:
-  inspector-server-node-modules:
-  inspector-cli-node-modules:
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+          initial_sync: true
+        - action: rebuild
+          path: package.json
+        - action: rebuild
+          path: server/package.json
+        - action: rebuild
+          path: client/package.json
+        - action: rebuild
+          path: cli/package.json

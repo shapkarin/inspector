@@ -47,14 +47,10 @@ docker run --rm \
 For local development from a checkout, use the included Compose file:
 
 ```bash
-docker compose -f compose.local.yaml up
+docker compose -f compose.local.yaml up --watch
 ```
 
-If you are using the legacy standalone Compose binary, run:
-
-```bash
-docker-compose -f compose.local.yaml up
-```
+This requires Docker Compose with `develop.watch` support.
 
 The UI will be available at:
 
@@ -62,12 +58,13 @@ The UI will be available at:
 http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=dev-token
 ```
 
-The Compose setup installs dependencies on first run, runs `npm run dev` with
-the repository bind-mounted into the container, and stores container dependencies
-in named volumes. To reinstall from scratch, remove those volumes:
+The Compose setup runs `npm ci` inside the container when dependencies are not
+already present, runs `npm run dev`, and one-way syncs repository changes from
+your checkout into the container. Local `node_modules` folders are optional; if
+they exist, Compose watch syncs them like other checkout files. To stop it, run:
 
 ```bash
-docker compose -f compose.local.yaml down -v
+docker compose -f compose.local.yaml down
 ```
 
 With the container running, you can execute the test script inside the same
