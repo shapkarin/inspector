@@ -70,10 +70,11 @@ in named volumes. To reinstall from scratch, remove those volumes:
 docker compose -f compose.local.yaml down -v
 ```
 
-With the container running, you can execute the test script inside the same container:
+With the container running, you can execute the test script inside the same
+container:
 
 ```bash
-docker exec -it inspector-local-dev npm test
+docker exec -it inspector-local-dev sh -lc "npm run build-server && npm test"
 ```
 
 ### From an MCP server repository
