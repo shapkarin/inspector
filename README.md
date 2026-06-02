@@ -42,6 +42,41 @@ docker run --rm \
   ghcr.io/modelcontextprotocol/inspector:latest
 ```
 
+### Local Development with Docker Compose
+
+For local development from a checkout, use the included Compose file:
+
+```bash
+docker compose -f compose.local.yaml up
+```
+
+If you are using the legacy standalone Compose binary, run:
+
+```bash
+docker-compose -f compose.local.yaml up
+```
+
+The UI will be available at:
+
+```text
+http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=dev-token
+```
+
+The Compose setup installs dependencies on first run, runs `npm run dev` with
+the repository bind-mounted into the container, and stores container dependencies
+in named volumes. To reinstall from scratch, remove those volumes:
+
+```bash
+docker compose -f compose.local.yaml down -v
+```
+
+With the container running, you can execute the test script inside the same
+container:
+
+```bash
+docker exec -it inspector-local-dev sh -lc "npm run build-server && npm test"
+```
+
 ### From an MCP server repository
 
 To inspect an MCP server implementation, there's no need to clone this repo. Instead, use `npx`. For example, if your server is built at `build/index.js`:

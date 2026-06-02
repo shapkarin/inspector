@@ -1,0 +1,31 @@
+services:
+  inspector:
+    image: node:24-slim
+    container_name: inspector-local-dev
+    working_dir: /app
+    init: true
+    stdin_open: true
+    tty: true
+    command: sh -lc "if [ ! -d node_modules/.bin ]; then npm ci --ignore-scripts; fi && npm run dev"
+    ports:
+      - "127.0.0.1:${CLIENT_PORT:-6274}:${CLIENT_PORT:-6274}"
+      - "127.0.0.1:${SERVER_PORT:-6277}:${SERVER_PORT:-6277}"
+    environment:
+      HOST: "0.0.0.0"
+      CLIENT_PORT: "${CLIENT_PORT:-6274}"
+      SERVER_PORT: "${SERVER_PORT:-6277}"
+      MCP_AUTO_OPEN_ENABLED: "false"
+      MCP_PROXY_AUTH_TOKEN: "${MCP_PROXY_AUTH_TOKEN:-dev-token}"
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - .:/app
+      - inspector-node-modules:/app/node_modules
+      - inspector-client-node-modules:/app/client/node_modules
+      - inspector-server-node-modules:/app/server/node_modules
+      - inspector-cli-node-modules:/app/cli/node_modules
+
+volumes:
+  inspector-node-modules:
+  inspector-client-node-modules:
+  inspector-server-node-modules:
+  inspector-cli-node-modules:
