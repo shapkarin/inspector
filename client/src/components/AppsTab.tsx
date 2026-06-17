@@ -532,7 +532,6 @@ const AppsTab = ({
                                   ) : prop.type === "string" ? (
                                     <Textarea
                                       id={key}
-                                      placeholder={prop.description}
                                       aria-describedby={
                                         showFieldDescription
                                           ? descriptionId
@@ -582,7 +581,6 @@ const AppsTab = ({
                                     <Input
                                       type="number"
                                       id={key}
-                                      placeholder={prop.description}
                                       aria-describedby={
                                         showFieldDescription
                                           ? descriptionId
