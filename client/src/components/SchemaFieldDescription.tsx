@@ -14,7 +14,7 @@ export default function SchemaFieldDescription({
   return (
     <p
       id={id}
-      className="mt-1 text-xs text-muted-foreground whitespace-pre-wrap"
+      className="mt-1 text-sm text-muted-foreground whitespace-pre-wrap"
     >
       {description}
     </p>
