@@ -481,7 +481,6 @@ const ToolsTab = ({
                             <Textarea
                               id={key}
                               name={key}
-                              placeholder={prop.description}
                               aria-describedby={
                                 showFieldDescription ? descriptionId : undefined
                               }
@@ -539,7 +538,6 @@ const ToolsTab = ({
                               type="number"
                               id={key}
                               name={key}
-                              placeholder={prop.description}
                               aria-describedby={
                                 showFieldDescription ? descriptionId : undefined
                               }
