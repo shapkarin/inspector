@@ -6,7 +6,7 @@ services:
     init: true
     stdin_open: true
     tty: true
-    command: sh -lc "if [ ! -d node_modules/.bin ]; then npm ci --ignore-scripts; fi && npm run dev"
+    command: sh -lc "if [ ! -d node_modules/.bin ]; then npm ci; fi && npm run dev"
     ports:
       - "127.0.0.1:${CLIENT_PORT:-6274}:${CLIENT_PORT:-6274}"
       - "127.0.0.1:${SERVER_PORT:-6277}:${SERVER_PORT:-6277}"
