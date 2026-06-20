@@ -14,7 +14,7 @@ services:
     init: true
     stdin_open: true
     tty: true
-    command: sh -lc "if [ ! -d node_modules/.bin ]; then npm ci --ignore-scripts; fi && npm run dev"
+    command: sh -lc "if [ ! -d node_modules/.bin ]; then npm ci; fi && npm run dev"
     ports:
       - "127.0.0.1:${CLIENT_PORT:-6274}:${CLIENT_PORT:-6274}"
       - "127.0.0.1:${SERVER_PORT:-6277}:${SERVER_PORT:-6277}"
@@ -31,11 +31,33 @@ services:
           path: .
           target: /app
           initial_sync: true
-        - action: rebuild
+        - action: sync+exec
           path: package.json
-        - action: rebuild
+          target: /app/package.json
+          exec:
+            command: npm i
+            working_dir: /app
+        - action: sync+exec
+          path: package-lock.json
+          target: /app/package-lock.json
+          exec:
+            command: npm ci
+            working_dir: /app
+        - action: sync+exec
           path: server/package.json
-        - action: rebuild
+          target: /app/server/package.json
+          exec:
+            command: npm i
+            working_dir: /app
+        - action: sync+exec
           path: client/package.json
-        - action: rebuild
+          target: /app/client/package.json
+          exec:
+            command: npm i
+            working_dir: /app
+        - action: sync+exec
           path: cli/package.json
+          target: /app/cli/package.json
+          exec:
+            command: npm i
+            working_dir: /app
