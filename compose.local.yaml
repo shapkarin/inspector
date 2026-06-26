@@ -14,7 +14,7 @@ services:
     init: true
     stdin_open: true
     tty: true
-    command: sh -lc "if [ ! -d node_modules/.bin ]; then npm ci; fi && npm run dev"
+    command: sh -lc "if [ ! -d node_modules/.bin ]; then npm ci; fi && cd clients/web && npm run dev"
     ports:
       - "127.0.0.1:${CLIENT_PORT:-6274}:${CLIENT_PORT:-6274}"
       - "127.0.0.1:${SERVER_PORT:-6277}:${SERVER_PORT:-6277}"
@@ -23,7 +23,8 @@ services:
       CLIENT_PORT: "${CLIENT_PORT:-6274}"
       SERVER_PORT: "${SERVER_PORT:-6277}"
       MCP_AUTO_OPEN_ENABLED: "false"
-      MCP_PROXY_AUTH_TOKEN: "${MCP_PROXY_AUTH_TOKEN:-dev-token}"
+      MCP_INSPECTOR_API_TOKEN: "${MCP_INSPECTOR_API_TOKEN:-dev-token}"
+      ALLOWED_ORIGINS: "http://localhost:${CLIENT_PORT:-6274},http://127.0.0.1:${CLIENT_PORT:-6274},http://0.0.0.0:${CLIENT_PORT:-6274}"
       CHOKIDAR_USEPOLLING: "true"
     develop:
       watch:
@@ -44,20 +45,50 @@ services:
             command: npm ci
             working_dir: /app
         - action: sync+exec
-          path: server/package.json
-          target: /app/server/package.json
+          path: clients/web/package.json
+          target: /app/clients/web/package.json
           exec:
             command: npm i
-            working_dir: /app
+            working_dir: /app/clients/web
         - action: sync+exec
-          path: client/package.json
-          target: /app/client/package.json
+          path: clients/web/package-lock.json
+          target: /app/clients/web/package-lock.json
           exec:
-            command: npm i
-            working_dir: /app
+            command: npm ci
+            working_dir: /app/clients/web
         - action: sync+exec
-          path: cli/package.json
-          target: /app/cli/package.json
+          path: clients/cli/package.json
+          target: /app/clients/cli/package.json
           exec:
             command: npm i
-            working_dir: /app
+            working_dir: /app/clients/cli
+        - action: sync+exec
+          path: clients/cli/package-lock.json
+          target: /app/clients/cli/package-lock.json
+          exec:
+            command: npm ci
+            working_dir: /app/clients/cli
+        - action: sync+exec
+          path: clients/tui/package.json
+          target: /app/clients/tui/package.json
+          exec:
+            command: npm i
+            working_dir: /app/clients/tui
+        - action: sync+exec
+          path: clients/tui/package-lock.json
+          target: /app/clients/tui/package-lock.json
+          exec:
+            command: npm ci
+            working_dir: /app/clients/tui
+        - action: sync+exec
+          path: clients/launcher/package.json
+          target: /app/clients/launcher/package.json
+          exec:
+            command: npm i
+            working_dir: /app/clients/launcher
+        - action: sync+exec
+          path: clients/launcher/package-lock.json
+          target: /app/clients/launcher/package-lock.json
+          exec:
+            command: npm ci
+            working_dir: /app/clients/launcher
